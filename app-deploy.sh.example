@@ -18,7 +18,7 @@ for server in "${servers[@]}"; do
 
     # Connect to the server and run the command
     echo "Connecting to $user_host on port $port"
-    ssh -p $port $user_host "$command"
+    ssh -o ConnectTimeout=10 -p $port $user_host "$command"
 
     # Sleep for 30 seconds
     echo "Sleeping for 30 seconds..."
