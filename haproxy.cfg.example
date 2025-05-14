@@ -1,0 +1,56 @@
+global
+    log stdout format raw daemon
+    maxconn 100000
+    tune.ssl.default-dh-param 2048
+    ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+    stats socket /var/run/haproxy.sock mode 660 level admin
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5s
+    timeout client  50s
+    timeout server  50s
+    timeout http-request 10s
+    timeout http-keep-alive 10s
+    retries 3
+    maxconn 10000
+
+#frontend http_front
+#    bind *:80
+#    redirect scheme https code 301 if !{ ssl_fc }
+
+frontend https_front
+    bind *:443 ssl crt /etc/haproxy/certs/uparzone.com.pem alpn h2,http/1.1
+
+    # Security headers
+    http-response set-header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    http-response set-header X-Frame-Options DENY
+    http-response set-header X-Content-Type-Options nosniff
+    http-response set-header X-XSS-Protection "1; mode=block"
+    http-response set-header Referrer-Policy no-referrer-when-downgrade
+
+    # Always pass the connecting IP
+    http-request set-header X-Forwarded-For %[src]
+
+    # If behind Cloudflare, override with real client IP
+    http-request set-header X-Real-IP %[req.hdr(CF-Connecting-IP)] if { req.hdr(CF-Connecting-IP) -m found }
+
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    option httpchk GET /
+    default-server inter 3s fall 3 rise 2 maxconn 1000
+
+    # Headers to help backend know the request origin
+    http-request set-header X-Forwarded-Proto https if { ssl_fc }
+    http-request set-header X-Forwarded-Port 443
+
+    server node1 192.168.1.101:80 check weight 1
+    server node2 192.168.1.102:80 check weight 1
+    server node3 192.168.1.103:80 check weight 1
