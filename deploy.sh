@@ -2,6 +2,8 @@
 
 echo "Starting HAProxy and Redis containers..."
 
+cd uparzone-haproxy/ || exit
+
 if [ ! -f .env ]; then
     cp .env.example .env
     REDIS_PASSWORD=$(openssl rand -base64 32)
@@ -10,12 +12,14 @@ if [ ! -f .env ]; then
     else
         echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> .env
     fi
-    echo "========== REDIS_PASSWORD is set to $REDIS_PASSWORD =========="
+    echo "\n\n========== REDIS_PASSWORD is set to $REDIS_PASSWORD ==========\n\n"
 fi
 
 if [ ! -f haproxy.cfg ]; then
     cp haproxy.cfg.example haproxy.cfg
 fi
+
+docker system prune --all -a -f
 
 docker-compose up -d
 
