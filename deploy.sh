@@ -2,6 +2,8 @@
 
 echo "Starting HAProxy and Redis containers..."
 
+git pull
+
 cd uparzone-haproxy/ || exit
 
 if [ ! -f .env ]; then
