@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Define an array with server connection parameters (root, ip, port)
+servers=(
+    "root@192.168.1.10:22"
+    "root@192.168.1.20:22"
+    "root@192.168.1.30:22"
+)
+
+# Define the command to run on each server
+command="sh /home/Uparzone-V2/git pull origin live && sh /home/Uparzone-V2/deploy.sh"
+
+# Loop through the servers array
+for server in "${servers[@]}"; do
+    # Extract user, IP, and port from the array element
+    user_host=$(echo $server | cut -d':' -f1)
+    port=$(echo $server | cut -d':' -f2)
+
+    # Connect to the server and run the command
+    echo "Connecting to $user_host on port $port"
+    ssh -p $port $user_host "$command"
+
+    # Sleep for 30 seconds
+    echo "Sleeping for 30 seconds..."
+    sleep 30
+done
+
+echo "Script execution completed."
