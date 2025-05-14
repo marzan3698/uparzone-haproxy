@@ -2,9 +2,7 @@
 
 echo "Starting HAProxy and Redis containers..."
 
-git pull
-
-cd uparzone-haproxy/ || exit
+cd uparzone-haproxy/ || echo "Continuing without changing directory to uparzone-haproxy/"
 
 if [ ! -f .env ]; then
     cp .env.example .env
