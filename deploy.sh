@@ -12,7 +12,9 @@ if [ ! -f .env ]; then
     else
         echo "REDIS_PASSWORD=$REDIS_PASSWORD" >> .env
     fi
-    echo "\n\n========== REDIS_PASSWORD is set to $REDIS_PASSWORD ==========\n\n"
+    echo "=========="
+    echo "REDIS_PASSWORD is set to $REDIS_PASSWORD"
+    echo "=========="
 fi
 
 if [ ! -f haproxy.cfg ]; then

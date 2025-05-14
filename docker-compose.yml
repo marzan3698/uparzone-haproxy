@@ -6,8 +6,8 @@ services:
     container_name: haproxy
     network_mode: host
     volumes:
-      - /home/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-      - /home/haproxy/certs:/etc/haproxy/certs
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./certs:/etc/haproxy/certs
     restart: always
 
   redis:
@@ -15,8 +15,8 @@ services:
     restart: always
     network_mode: host
     env_file:
-      - /home/redis/.env
+      - ./.env
     entrypoint: [ "bash", "/usr/local/bin/redis.sh" ]
     volumes:
-      - /home/redis:/data
+      - ./redis:/data
       - ./redis.sh:/usr/local/bin/redis.sh
