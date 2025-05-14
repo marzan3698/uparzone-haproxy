@@ -26,5 +26,7 @@ docker system prune --all -a -f
 docker-compose up -d
 
 WORKING_DIR=$(pwd)
+echo ""
 echo "Update HAProxy Config in $WORKING_DIR/haproxy.cfg and restart container to apply changes."
+echo ""
 echo "Set the SSL Certificate in $WORKING_DIR/certs/uparzone.com.pem. The crt option should point to a combined certificate file that includes both the certificate and the private key in a single .pem file."
