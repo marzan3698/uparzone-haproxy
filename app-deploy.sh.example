@@ -8,7 +8,7 @@ servers=(
 )
 
 # Define the command to run on each server
-command="sh /home/Uparzone-V2/git pull origin live && sh /home/Uparzone-V2/deploy.sh"
+command="cd /home/Uparzone-V2 && git pull origin live && sh deploy.sh"
 
 # Loop through the servers array
 for server in "${servers[@]}"; do
