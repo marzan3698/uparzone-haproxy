@@ -1,3 +1,4 @@
 haproxy.cfg
 .env
 .idea
+.app-deploy.sh
