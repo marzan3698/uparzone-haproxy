@@ -5,6 +5,7 @@ services:
     image: haproxy:lts-bookworm
     container_name: haproxy
     ports:
+      - "8404:8404"
       - "443:443"
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
